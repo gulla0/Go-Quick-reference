@@ -1,203 +1,207 @@
-📘 Ouroboros: Comprehensive Q&A Guide
+# 📘 Ouroboros: Comprehensive Q&A Guide
 
-A complete structured explanation of Cardano’s Proof-of-Stake consensus protocol.
+A complete structured explanation of Cardano's Proof-of-Stake consensus protocol.
 
-⸻
+---
 
-1. Consensus Basics
+## 1. Consensus Basics
 
-Q1: What is a consensus protocol?
+### Q1: What is a consensus protocol?
 
 A consensus protocol is the rule set that nodes follow to agree on who produces the next block and what the canonical chain is.
 
-Q2: What is Proof-of-Stake (PoS)?
+### Q2: What is Proof-of-Stake (PoS)?
 
-Stake determines your probability of producing the next block.
+Stake determines your probability of producing the next block.  
 More stake = higher chance, but not guaranteed.
 
-⸻
+---
 
-2. Time Structure: Epochs & Slots
+## 2. Time Structure: Epochs & Slots
 
-Q3: Why divide time into epochs and slots?
+### Q3: Why divide time into epochs and slots?
 
-Blockchains cannot rely on real-world time.
+Blockchains cannot rely on real-world time.  
 Slots provide deterministic time windows for block production; epochs handle stake snapshots and randomness.
 
-Q4: What is a slot leader?
+### Q4: What is a slot leader?
 
 A node selected probabilistically to produce a block in a specific slot.
 
-⸻
+---
 
-3. VRF Leader Election
+## 3. VRF Leader Election
 
-Q5: How are slot leaders chosen?
+### Q5: How are slot leaders chosen?
 
-Each node runs a private VRF (Verifiable Random Function). If the VRF output is below a threshold based on its stake, it becomes the leader.
+Each node runs a private **VRF** (Verifiable Random Function). If the VRF output is below a threshold based on its stake, it becomes the leader.
 
-Q6: Is there a global slot leader list?
+### Q6: Is there a global slot leader list?
 
-No. Each node checks privately whether it is the leader.
+**No.** Each node checks privately whether it is the leader.
 
-Q7: Can multiple leaders win the same slot?
+### Q7: Can multiple leaders win the same slot?
 
-Yes, rarely.
+**Yes, rarely.**  
 Ouroboros is designed to handle this.
 
-Q8: Why allow multiple leaders?
+### Q8: Why allow multiple leaders?
 
-Unpredictable leaders = more secure.
-Occasional forks = robust and healthy for density-based chain selection.
+- Unpredictable leaders = more secure
+- Occasional forks = robust and healthy for density-based chain selection
 
-Q9: Why does tuning produce ~1 leader per slot?
+### Q9: Why does tuning produce ~1 leader per slot?
 
-Total stake fractions always sum to 1.
-Leader probability parameter (α) ensures expected leaders per slot ≈ 1.
+- Total stake fractions always sum to 1
+- Leader probability parameter (α) ensures expected leaders per slot ≈ 1
 
-⸻
+---
 
-4. Chain Density, Forks & Finality
+## 4. Chain Density, Forks & Finality
 
-Q10: Why use chain density instead of longest-chain rule?
+### Q10: Why use chain density instead of longest-chain rule?
 
-In PoS, anyone can cheaply create a long fake chain.
+In PoS, anyone can cheaply create a long fake chain.  
 Density counts valid VRF-produced blocks, which attackers cannot fake.
 
-Q11: What happens when no leader appears?
+### Q11: What happens when no leader appears?
 
-The slot is empty.
+The slot is empty.  
 Chain continues normally.
 
-Q12: What if two chains have the same density?
+### Q12: What if two chains have the same density?
 
-Temporary fork.
+Temporary fork.  
 Next honest block breaks the tie and resolves it.
 
-Q13: Why wait k blocks for settlement (finality)?
+### Q13: Why wait k blocks for settlement (finality)?
 
-Forks need time to resolve.
-Honest density must “bury” blocks so attackers cannot reorganize them.
+- Forks need time to resolve
+- Honest density must "bury" blocks so attackers cannot reorganize them
 
-⸻
+---
 
-5. Security Thresholds
+## 5. Security Thresholds
 
-Q14: Why must honest stake > 50%?
+### Q14: Why must honest stake > 50%?
 
-Slot leader probability is proportional to stake.
-Majority stake = majority leader probability = majority chain density.
+- Slot leader probability is proportional to stake
+- Majority stake = majority leader probability = majority chain density
 
-Q15: What if adversary has exactly 50%?
+### Q15: What if adversary has exactly 50%?
 
 System becomes unstable:
-	•	no clear density dominance
-	•	convergence breaks
-	•	settlement fails
-	•	forks may oscillate indefinitely
 
-⸻
+- No clear density dominance
+- Convergence breaks
+- Settlement fails
+- Forks may oscillate indefinitely
 
-6. Epoch Randomness & VRFs
+---
 
-Q16: What is epoch randomness?
+## 6. Epoch Randomness & VRFs
+
+### Q16: What is epoch randomness?
 
 A global randomness seed derived from previous epoch VRF outputs.
 
-Q17: How is epoch randomness used?
+### Q17: How is epoch randomness used?
 
 It seeds the VRF lotteries in the next epoch, making leader selection unpredictable.
 
-Q18: Difference between slot randomness and epoch randomness?
-	•	Slot VRF randomness: private, per-slot, used to decide leadership
-	•	Epoch randomness: global seed that all nodes share, feeding future VRFs
+### Q18: Difference between slot randomness and epoch randomness?
 
-Q19: Why must randomness come from the chain?
+- **Slot VRF randomness**: private, per-slot, used to decide leadership
+- **Epoch randomness**: global seed that all nodes share, feeding future VRFs
 
-The chain is the only shared, trustless, verifiable data source.
+### Q19: Why must randomness come from the chain?
+
+The chain is the only shared, trustless, verifiable data source.  
 External randomness introduces trust and vulnerabilities.
 
-⸻
+---
 
-7. Praos vs Genesis
+## 7. Praos vs Genesis
 
-Q20: What does Praos secure?
+### Q20: What does Praos secure?
 
 Private, unpredictable leader election resistant to adaptive and DoS attacks.
 
-Q21: What does Genesis secure?
+### Q21: What does Genesis secure?
 
 Chain selection, trustless bootstrapping, and long-range attack protection.
 
-Q22: Why do we need both?
+### Q22: Why do we need both?
 
-Praos secures the present.
-Genesis secures the past.
-They solve different security problems.
+- **Praos** secures the present
+- **Genesis** secures the past
+- They solve different security problems
 
-⸻
+---
 
-8. Stake Pools, Delegation & Stake Changes
+## 8. Stake Pools, Delegation & Stake Changes
 
-Q23: Why does Cardano use stake pools?
+### Q23: Why does Cardano use stake pools?
 
 Pools reduce VRF participants from millions to thousands, prevent Sybil attacks, ensure uptime, and simplify rewards.
 
-Q24: Why do stake changes apply only at epoch boundaries?
+### Q24: Why do stake changes apply only at epoch boundaries?
 
 To prevent mid-epoch stake-shifting attacks, grinding attacks, and manipulation of leader probabilities.
 
-Q25: Why is some stake being offline okay?
+### Q25: Why is some stake being offline okay?
 
-Leader selection is probabilistic.
-As long as honest majority stake is overall online, the protocol remains secure.
+- Leader selection is probabilistic
+- As long as honest majority stake is overall online, the protocol remains secure
 
-⸻
+---
 
-9. Fork Handling & Network Behavior
+## 9. Fork Handling & Network Behavior
 
-Q26: Why must the leader know slightly before the slot starts?
+### Q26: Why must the leader know slightly before the slot starts?
 
 To prepare and propagate the block quickly, minimizing empty slots.
 
-Q27: Why not make the leader schedule public?
+### Q27: Why not make the leader schedule public?
 
-Predictable leaders could be attacked.
-Private VRFs keep leader identity hidden until block production.
+- Predictable leaders could be attacked
+- Private VRFs keep leader identity hidden until block production
 
-⸻
+---
 
-10. Security Against Attacks
+## 10. Security Against Attacks
 
-Q28: What attack does Genesis prevent?
+### Q28: What attack does Genesis prevent?
 
-Long-range attacks — fake historical chains presented to new nodes.
+**Long-range attacks** — fake historical chains presented to new nodes.
 
-Q29: Why include VRF proof in the block?
+### Q29: Why include VRF proof in the block?
 
 It proves the leader legitimately won the lottery using its stake and prevents randomness manipulation.
 
-Q30: Why can’t attackers bias randomness?
+### Q30: Why can't attackers bias randomness?
 
-VRFs are unbiasable: they can’t grind multiple outputs or choose better ones.
+VRFs are unbiasable: they can't grind multiple outputs or choose better ones.
 
-⸻
+---
 
-11. Ouroboros vs Proof-of-Work
+## 11. Ouroboros vs Proof-of-Work
 
-Q31: What is the biggest advantage over PoW?
-	•	Huge energy savings
-	•	Predictable block times
-	•	Stronger formal security
-	•	Better decentralization
-	•	Protocol upgradability
+### Q31: What is the biggest advantage over PoW?
 
-⸻
+- Huge energy savings
+- Predictable block times
+- Stronger formal security
+- Better decentralization
+- Protocol upgradability
 
-12. The Randomness Cycle
+---
 
-Q32: What’s the Ouroboros randomness cycle?
+## 12. The Randomness Cycle
 
+### Q32: What's the Ouroboros randomness cycle?
+
+```
 Epoch Randomness
     ↓
 Seeding the VRF Lottery
@@ -207,22 +211,23 @@ Slot Leaders Chosen
 VRF Outputs in Blocks
     ↓
 Become Next Epoch's Randomness
+```
 
 A self-reinforcing, trustless loop.
 
-⸻
+---
 
-13. Why Ouroboros Evolves
+## 13. Why Ouroboros Evolves
 
-Q33: Why is Ouroboros a family of protocols (Classic → Praos → Genesis → Chronos, etc.)?
+### Q33: Why is Ouroboros a family of protocols (Classic → Praos → Genesis → Chronos, etc.)?
 
-Because cryptographic attacks, network conditions, and performance needs evolve.
+Because cryptographic attacks, network conditions, and performance needs evolve.  
 Each version fixes a specific limitation.
 
-⸻
+---
 
-⭐ Final One-Sentence Summary
+## ⭐ Final One-Sentence Summary
 
 Ouroboros is a probabilistic, VRF-based Proof-of-Stake protocol that uses private leader elections, density-based chain selection, epoch-seeded randomness, and stake pools to create a secure, energy-efficient, scalable, and formally verified blockchain consensus.
 
-⸻
+---
